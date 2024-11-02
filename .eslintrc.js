@@ -21,6 +21,7 @@ export default {
     plugins: ['react'],
     rules: {
       'react/react-in-jsx-scope': 'off',
+      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
     },
   };
   
