@@ -3,7 +3,7 @@ image: node:16
 stages:
   - install
   - build
-  - test
+  - lint
   - deploy
 
 # Cache node_modules to speed up the build
@@ -30,12 +30,12 @@ build:
     paths:
       - dist/
 
-# Job to run automated tests
-test:
-  stage: test
+# Job to run linting
+lint:
+  stage: lint
   script:
-    - npm run test  # This will now run the Jest tests
-  allow_failure: false  # Stop pipeline if tests fail
+    - npm run lint  # This will now run the ESLint checks
+  allow_failure: false  # Stop pipeline if linting fails
   dependencies:
     - install
 
@@ -50,5 +50,4 @@ deploy:
     - master  # Run only on changes to the master branch
   dependencies:
     - build
-    - test
-
+    - lint
