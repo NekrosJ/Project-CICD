@@ -1,0 +1,54 @@
+image: node:16
+
+stages:
+  - install
+  - build
+  - test
+  - deploy
+
+# Cache node_modules to speed up the build
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+# Job to install dependencies
+install:
+  stage: install
+  script:
+    - npm ci  # Use npm ci for faster installation
+  artifacts:
+    paths:
+      - node_modules/
+
+# Job to build the application
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+# Job to run automated tests
+test:
+  stage: test
+  script:
+    - npm run test  # This will now run the Jest tests
+  allow_failure: false  # Stop pipeline if tests fail
+  dependencies:
+    - install
+
+# Job to deploy the application
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    - echo "Add actual deployment commands here"
+    # You can use rsync, scp, or cloud service CLI (like AWS CLI, GCP CLI, or Azure CLI)
+  only:
+    - master  # Run only on changes to the master branch
+  dependencies:
+    - build
+    - test
+
