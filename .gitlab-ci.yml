@@ -31,23 +31,27 @@ build:
     paths:
       - dist/
 
-# # Job to run linting
-# lint:
-#   stage: lint
-#   script:
-#     - npm run lint
-#   allow_failure: false  # Stop pipeline if linting fails
-#   dependencies:
-#     - install
+# Job to run linting
+lint:
+  stage: lint
+  script:
+    - npm run lint
+  allow_failure: false  # Stop pipeline if linting fails
+  dependencies:
+    - install
 
 # Job to run tests
 test:
   stage: test
   script:
     - npm run test
-  allow_failure: false  # Stop pipeline if tests fail
+  allow_failure: false
   dependencies:
     - install
+  parallel:  # Run tests in parallel
+    matrix:
+      - TEST_SUITE: "unit"
+      - TEST_SUITE: "integration"
 
 # Job to deploy the application
 deploy:
