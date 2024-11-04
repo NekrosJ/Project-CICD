@@ -3,7 +3,8 @@ image: node:16
 stages:
   - install
   - build
-  # - lint
+  - lint
+  - test
   - deploy
 
 # Cache node_modules to speed up the build
@@ -16,7 +17,7 @@ cache:
 install:
   stage: install
   script:
-    - npm ci  # Use npm ci for faster installation
+    - npm ci
   artifacts:
     paths:
       - node_modules/
@@ -30,14 +31,23 @@ build:
     paths:
       - dist/
 
-# # Job to run linting
-# lint:
-#   stage: lint
-#   script:
-#     - npm run lint  # This will now run the ESLint checks
-#   allow_failure: false  # Stop pipeline if linting fails
-#   dependencies:
-#     - install
+# Job to run linting
+lint:
+  stage: lint
+  script:
+    - npm run lint
+  allow_failure: false  # Stop pipeline if linting fails
+  dependencies:
+    - install
+
+# Job to run tests
+test:
+  stage: test
+  script:
+    - npm run test
+  allow_failure: false  # Stop pipeline if tests fail
+  dependencies:
+    - install
 
 # Job to deploy the application
 deploy:
@@ -45,8 +55,7 @@ deploy:
   script:
     - echo "Deploying application..."
     - echo "Add actual deployment commands here"
-    # You can use rsync, scp, or cloud service CLI (like AWS CLI, GCP CLI, or Azure CLI)
   only:
-    - master  # Run only on changes to the master branch
+    - master
   dependencies:
     - build
