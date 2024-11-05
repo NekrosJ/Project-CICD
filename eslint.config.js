@@ -9,7 +9,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest, // Thêm globals cho Jest
+        ...globals.jest, // Nếu bạn sử dụng Jest
       },
     },
     settings: {

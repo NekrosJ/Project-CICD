@@ -1,0 +1,36 @@
+# Chọn image Node.js làm base
+FROM node:16 AS build
+
+# Đặt thư mục làm việc trong container
+WORKDIR /app
+
+# Sao chép package.json và package-lock.json vào container
+COPY package*.json ./
+
+# Cài đặt dependencies
+RUN npm ci
+
+# Sao chép tất cả tệp mã nguồn vào container
+COPY . .
+
+# Xây dựng ứng dụng
+RUN npm run build
+
+# Bước thứ hai: Chạy ứng dụng
+FROM node:16
+
+# Đặt thư mục làm việc
+WORKDIR /app
+
+# Sao chép tệp đã xây dựng từ bước trước
+COPY --from=build /app/build ./build
+
+# Cài đặt các dependencies cần thiết cho runtime
+COPY package*.json ./
+RUN npm install --production
+
+# Chỉ định cổng để container lắng nghe
+EXPOSE 5000
+
+# Chạy ứng dụng
+CMD ["npx", "serve", "-s", "build", "-l", "5000"]
