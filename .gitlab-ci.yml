@@ -30,7 +30,7 @@ build:
   services:
     - docker:19.03.12-dind
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_CERTDIR: "/dist"
   before_script:
     - docker info
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
