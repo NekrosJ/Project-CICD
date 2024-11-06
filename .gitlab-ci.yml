@@ -21,9 +21,9 @@ install:
 # Job to build the application and Docker image
 build:
   stage: build
-  image: docker:20.10.16 # Docker image with Docker installed
+  image: docker
   services:
-    - docker:20.10.16-dind # Docker-in-Docker service
+    - docker:dind
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
