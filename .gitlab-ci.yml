@@ -1,6 +1,6 @@
 variables:
-  IMAGE_NAME: yourusername/react-app
-  IMAGE_TAG: latest
+  IMAGE_NAME: nanajanashia/demo-app
+  IMAGE_TAG: python-app-1.0
 
 stages:
   - install
@@ -8,7 +8,7 @@ stages:
   - test
   - deploy
 
-# Install job to install dependencies
+# Job to install dependencies
 install:
   stage: install
   image: node:16
@@ -18,31 +18,30 @@ install:
     paths:
       - node_modules/
 
-# Build job to build the application and Docker image
+# Job to build the application and Docker image
 build:
   stage: build
-  image: node:16
+  image: docker:20.10.16 # Docker image with Docker installed
   services:
-    - docker:20.10.16-dind
+    - docker:20.10.16-dind # Docker-in-Docker service
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - npm run build
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker push $IMAGE_NAME:$IMAGE_TAG
 
-# Run tests after building the application
-run_tests:
+# Job to run tests  
+test:
   stage: test
   image: node:16
-  script:
+  script:                                                     # Running tests
     - npm run test
   dependencies:
     - install
 
-# # Deploy job to deploy the application
+# # Job to deploy the application
 # deploy:
 #   stage: deploy
 #   before_script:
@@ -51,4 +50,4 @@ run_tests:
 #     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@161.35.223.117 "
 #         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
 #         docker ps -aq | xargs docker stop | xargs docker rm &&
-#         docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG"
+#         docker run -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
