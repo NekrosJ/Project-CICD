@@ -23,7 +23,7 @@ FROM node:16
 WORKDIR /app
 
 # Sao chép tệp đã xây dựng từ bước trước
-COPY --from=build /app/build ./build
+COPY --from=build /app/dist ./dist
 
 # Cài đặt các dependencies cần thiết cho runtime
 COPY package*.json ./
@@ -33,4 +33,4 @@ RUN npm install --production
 EXPOSE 5000
 
 # Chạy ứng dụng
-CMD ["npx", "serve", "-s", "build", "-l", "5000"]
+CMD ["npx", "serve", "-s", "dist", "-l", "5000"]
