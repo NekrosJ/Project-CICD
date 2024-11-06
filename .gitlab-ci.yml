@@ -1,6 +1,6 @@
 variables:
-  IMAGE_NAME: nanajanashia/demo-app
-  IMAGE_TAG: python-app-1.0
+  IMAGE_NAME: nekrosj47/projectcicd
+  IMAGE_TAG: latest
 
 stages:
   - install
