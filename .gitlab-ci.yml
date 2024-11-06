@@ -1,5 +1,5 @@
 variables:
-  IMAGE_NAME: nekrosj47/projectcicd
+  IMAGE_NAME: nanajanashia/react-app
   IMAGE_TAG: latest
 
 stages:
@@ -8,53 +8,40 @@ stages:
   - test
   - deploy
 
-# Cache node_modules to speed up the build
-cache:
-  paths:
-    - node_modules/
-
-# Job to install dependencies
+# Install job to install dependencies
 install:
   stage: install
   image: node:16
   script:
-    - npm ci
-  artifacts:
-    paths:
-      - node_modules/
+    - npm install
 
-# Job to build the application and Docker image
+# Build job to build the Docker image
 build:
   stage: build
-  image: docker:latest
-  services:
-    - docker:19.03.12-dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/dist"
+  image: node:16
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - docker build -f Dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+    - npm run build
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker push $IMAGE_NAME:$IMAGE_TAG
-  only:
-    - master
 
-# Job to run tests
-test:
+# Run tests after building
+run_tests:
   stage: test
   image: node:16
   script:
-    - npm run test  # Run your tests
+    - npm run test
   dependencies:
     - install
 
-# # Optional deploy job (if needed)
+# # Deploy job to deploy the application
 # deploy:
 #   stage: deploy
 #   before_script:
-#     - chmod 400 $SSH_KEY  # If deploying over SSH and using an SSH key
+#     - chmod 400 $SSH_KEY
 #   script:
 #     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@161.35.223.117 "
 #         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
 #         docker ps -aq | xargs docker stop | xargs docker rm &&
-#         docker run -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
+#         docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG"
