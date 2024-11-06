@@ -1,36 +1,29 @@
-# Chọn image Node.js làm base
+# Step 1: Use official Node.js image to build the app
 FROM node:16 AS build
 
-# Đặt thư mục làm việc trong container
+# Set the working directory in the container
 WORKDIR /app
 
-# Sao chép package.json và package-lock.json vào container
-COPY package*.json ./
+# Copy the package.json and package-lock.json to install dependencies
+COPY package.json package-lock.json ./
 
-# Cài đặt dependencies
-RUN npm ci
+# Install dependencies
+RUN npm install
 
-# Sao chép tất cả tệp mã nguồn vào container
+# Copy the rest of the application code
 COPY . .
 
-# Xây dựng ứng dụng
+# Build the React app
 RUN npm run build
 
-# Bước thứ hai: Chạy ứng dụng
-FROM node:16
+# Step 2: Use Nginx to serve the build files
+FROM nginx:alpine
 
-# Đặt thư mục làm việc
-WORKDIR /app
+# Copy build files from the previous image
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Sao chép tệp đã xây dựng từ bước trước
-COPY --from=build /app/dist ./dist
+# Expose port 80 for the app
+EXPOSE 80
 
-# Cài đặt các dependencies cần thiết cho runtime
-COPY package*.json ./
-RUN npm install --production
-
-# Chỉ định cổng để container lắng nghe
-EXPOSE 5000
-
-# Chạy ứng dụng
-CMD ["npx", "serve", "-s", "dist", "-l", "5000"]
+# Start Nginx to serve the app
+CMD ["nginx", "-g", "daemon off;"]
