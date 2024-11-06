@@ -9,15 +9,15 @@ stages:
   - test
   - deploy
 
-# Job để cài đặt dependencies
-install:
-  stage: install
-  image: node:16
-  script:
-    - npm install
-  artifacts:
-    paths:
-      - node_modules/
+# # Job để cài đặt dependencies
+# install:
+#   stage: install
+#   image: node:16
+#   script:
+#     - npm install
+#   artifacts:
+#     paths:
+#       - node_modules/
 
 # Job để build Docker image
 build:
@@ -35,14 +35,14 @@ build:
     paths:
       - build/
 
-# Job để test ứng dụng (nếu có test)
-test:
-  stage: test
-  image: node:16
-  script:
-    - npm run test
-  dependencies:
-    - install
+# # Job để test ứng dụng (nếu có test)
+# test:
+#   stage: test
+#   image: node:16
+#   script:
+#     - npm run test
+#   dependencies:
+#     - install
 
 # # Job to deploy the application
 # deploy:
