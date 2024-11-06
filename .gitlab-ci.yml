@@ -35,8 +35,10 @@ build:
     - docker info
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - docker build -f Dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} .
-    - docker push ${IMAGE_NAME}:${IMAGE_TAG}
+    - pwd
+    - ls -al
+    - docker build -f Dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
   only:
     - master
 
