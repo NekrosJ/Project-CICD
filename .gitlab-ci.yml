@@ -2,8 +2,8 @@
 variables:
   IMAGE_NAME: nekrosj47/projectcicd
   IMAGE_TAG: react-app-1.0
-  REGISTRY_URL: docker.io  # Ensure the registry URL is set correctly (DockerHub)
-  DOCKER_TLS_CERTDIR: "/certs"  # Docker-in-Docker setup for TLS certificates
+  # REGISTRY_URL: docker.io  # Ensure the registry URL is set correctly (DockerHub)
+  # DOCKER_TLS_CERTDIR: "/certs"  # Docker-in-Docker setup for TLS certificates
 
 stages:
   - install
