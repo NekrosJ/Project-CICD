@@ -20,7 +20,7 @@ install:
       - node_modules/
 
 # Job để build Docker image
-build_image:
+build:
   stage: build
   image: docker:27.3.1-cli
   services:
