@@ -1,13 +1,6 @@
 #!/bin/bash
 set -e # Dừng script nếu có lỗi xảy ra
 
-# Debug: In ra các biến quan trọng
-echo "DEBUG: Using SSH private key: $SSH_PRIVATE_KEY"
-echo "DEBUG: EC2_PUBLIC_IP = $EC2_PUBLIC_IP"
-echo "DEBUG: SSH_USER = $SSH_USER"
-echo "DEBUG: IMAGE_NAME = $IMAGE_NAME"
-echo "DEBUG: IMAGE_TAG = $IMAGE_TAG"
-
 echo "Đang SSH vào EC2 instance..."
 ssh -i ~/.ssh/id_rsa $SSH_USER@$EC2_PUBLIC_IP "
     set -e &&

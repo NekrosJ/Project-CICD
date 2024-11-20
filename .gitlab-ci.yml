@@ -3,7 +3,7 @@ variables:
   IMAGE_TAG: react-app-1.0
   AWS_REGION: "us-east-1"
   SSH_USER: "ec2-user"
-  EC2_PUBLIC_IP: "18.234.38.120"
+  EC2_PUBLIC_IP: "34.229.109.58"
 
 stages:
   - install
@@ -48,18 +48,13 @@ deploy:
   stage: deploy
   image: amazon/aws-cli:latest
   environment:
-    name: production # Hoặc staging tùy vào môi trường bạn muốn
+    name: production
     url: http://$EC2_PUBLIC_IP
   before_script:
-    # Giải mã khóa SSH
+    - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
-
-    # Cấu hình AWS CLI
-    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-    - aws configure set default.region $AWS_REGION
 
   script:
     - ./gitlab-deploy.sh
@@ -67,9 +62,6 @@ deploy:
     - master
   dependencies:
     - build
-
-
-
 
 
 
