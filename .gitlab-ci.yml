@@ -51,13 +51,6 @@ deploy:
     name: production # Hoặc staging tùy vào môi trường bạn muốn
     url: http://$EC2_PUBLIC_IP
   before_script:
-    # Debug: Kiểm tra biến môi trường trước khi SSH và triển khai
-    - echo "DEBUG: SSH_PRIVATE_KEY = $SSH_PRIVATE_KEY"
-    - echo "DEBUG: EC2_PUBLIC_IP = $EC2_PUBLIC_IP"
-    - echo "DEBUG: AWS_ACCESS_KEY_ID = $AWS_ACCESS_KEY_ID"
-    - echo "DEBUG: AWS_SECRET_ACCESS_KEY = $AWS_SECRET_ACCESS_KEY"
-    - echo "DEBUG: AWS_REGION = $AWS_REGION"
-
     # Giải mã khóa SSH
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -74,6 +67,7 @@ deploy:
     - master
   dependencies:
     - build
+
 
 
 
