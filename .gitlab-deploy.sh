@@ -16,3 +16,4 @@ ssh -i ~/.ssh/id_rsa $SSH_USER@$EC2_PUBLIC_IP "
 "
 
 echo "Triển khai thành công!"
+
