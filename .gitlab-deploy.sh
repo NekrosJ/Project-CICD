@@ -10,12 +10,7 @@ ssh -i ~/.ssh/id_rsa $SSH_USER@$EC2_PUBLIC_IP "
     docker stop react-app || true &&
     docker rm react-app || true &&
     echo 'Chạy container mới...' &&
-    docker run -d --name react-app -p 80:80 $IMAGE_NAME:$IMAGE_TAG &&
-    echo 'Container đã được khởi động. Giữ container chạy liên tục...' &&
-    # Giữ container chạy vĩnh viễn
-    while true; do
-        sleep 60 # Duy trì hoạt động để container không bị dừng
-    done
+    docker run -d --name react-app -p 80:80 $IMAGE_NAME:$IMAGE_TAG
 "
 
 echo "Triển khai thành công!"
