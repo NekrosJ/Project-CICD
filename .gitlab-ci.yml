@@ -57,16 +57,12 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
   script:
-    - chmod +x deploy.sh
-    - ./deploy.sh $EC2_PUBLIC_IP $IMAGE_NAME $IMAGE_TAG
+    - chmod +x deploy_ec2.sh
+    - ./deploy_ec2.sh $EC2_PUBLIC_IP $IMAGE_NAME $IMAGE_TAG
   only:
     - master
-
-
-
-
-
-
+  dependencies:
+    - build
 
 
 # # Job to deploy the application
