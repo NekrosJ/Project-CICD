@@ -3,7 +3,7 @@ variables:
   IMAGE_TAG: react-app-1.0
   AWS_REGION: "us-east-1"
   SSH_USER: "ec2-user"
-  EC2_PUBLIC_IP: "34.229.109.58"
+  EC2_PUBLIC_IP: "52.201.131.187"
 
 stages:
   - install
@@ -46,26 +46,25 @@ test:
 
 deploy:
   stage: deploy
-  image: amazon/aws-cli:latest
+  image: docker:20.10.8  # Sử dụng Docker image
   before_script:
+    # Thiết lập SSH key để kết nối EC2
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
-    - set -x  # Bật chế độ debug để xem chi tiết từng lệnh
-    - aws configure set region $AWS_REGION
-    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
   script:
     - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@$EC2_PUBLIC_IP "
         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
         docker pull $IMAGE_NAME:$IMAGE_TAG &&
-        docker stop $(docker ps -aq) && docker rm $(docker ps -aq) &&
+        (docker ps -aq | xargs -r docker stop | xargs -r docker rm) &&
         docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG"
   only:
     - master
   dependencies:
     - build
+
+
 
 
 
