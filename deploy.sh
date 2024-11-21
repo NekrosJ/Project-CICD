@@ -1,30 +1,29 @@
 #!/bin/bash
 
-# Nhận thông tin từ tham số
-EC2_PUBLIC_IP=$1
-IMAGE_NAME=$2
-IMAGE_TAG=$3
+set -e  # Kết thúc nếu có lỗi xảy ra
+set -x  # Hiển thị log khi chạy script
 
-# Kiểm tra Docker và triển khai ứng dụng
-ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@$EC2_PUBLIC_IP <<EOF
-    # Kiểm tra và cài đặt Docker nếu chưa có
-    if ! command -v docker &> /dev/null
-    then
-        echo "Docker không được tìm thấy. Đang cài đặt Docker..."
-        sudo yum update -y
+EC2_PUBLIC_IP=52.90.187.238
+IMAGE_NAME=nekrosj47/projectcicd
+IMAGE_TAG=react-app-1.0
+
+ssh -i ~/.ssh/id_rsa ec2-user@$EC2_PUBLIC_IP <<SHEND
+    set -e
+    set -x
+
+    # Kiểm tra và cài đặt Docker
+    if ! command -v docker &> /dev/null; then
+        echo "Docker not found. Installing Docker..."
         sudo yum install -y docker
         sudo service docker start
         sudo usermod -aG docker ec2-user
     else
-        echo "Docker đã được cài đặt."
+        echo "Docker is already installed."
     fi
 
-    # Kéo image từ Docker Hub và chạy container
-    echo "Đang kéo image từ Docker Hub..."
+    # Kéo Docker image và chạy container
     sudo docker pull $IMAGE_NAME:$IMAGE_TAG
-    echo "Dừng và gỡ bỏ container cũ (nếu có)..."
     sudo docker ps -q | xargs -r sudo docker stop
     sudo docker ps -aq | xargs -r sudo docker rm
-    echo "Chạy container mới..."
     sudo docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG
-EOF
+SHEND
