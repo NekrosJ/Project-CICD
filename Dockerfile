@@ -29,6 +29,9 @@ COPY . .
 # Build ứng dụng React
 RUN npm run build
 
+# Kiểm tra nếu thư mục build tồn tại
+RUN if [ ! -d "/app/build" ]; then echo "Build folder not found!"; exit 1; fi
+
 # Sử dụng nginx để phục vụ ứng dụng React đã build
 FROM nginx:alpine
 
