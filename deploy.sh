@@ -3,7 +3,7 @@
 set -e  # Kết thúc nếu có lỗi xảy ra
 set -x  # Hiển thị log khi chạy script
 
-EC2_PUBLIC_IP=52.90.187.238
+EC2_PUBLIC_IP=3.84.248.107
 IMAGE_NAME=nekrosj47/projectcicd
 IMAGE_TAG=react-app-1.0
 
