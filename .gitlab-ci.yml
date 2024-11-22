@@ -3,7 +3,7 @@ variables:
   IMAGE_TAG: react-app-1.0
   AWS_REGION: "us-east-1"
   SSH_USER: "ec2-user"
-  EC2_PUBLIC_IP: "52.90.187.238"
+  EC2_PUBLIC_IP: "3.84.248.107"
   DOCKER_TLS_CERTDIR: "/certs"
 
 stages:
