@@ -21,9 +21,12 @@ stages:
 # Cài đặt dependencies
 install:
   stage: install
-  image: node:16-slim
+  image: node:16
   script:
     - npm install
+  artifacts:
+    paths:
+      - node_modules/
 
 # Build Docker image và push lên Docker Hub
 build:
@@ -40,15 +43,13 @@ build:
 # Chạy kiểm tra unit test
 test:
   stage: test
-  image: node:16-slim
+  image: node:16
   before_script:
     - apt-get update && apt-get install -y build-essential
   script:
     - npm install
     - npm run test
   dependencies:
-    - install
-  needs:
     - install
 
 # Deploy ứng dụng lên AWS EC2

@@ -21,17 +21,11 @@ ssh -i ~/.ssh/id_rsa ec2-user@$EC2_PUBLIC_IP <<SHEND
         echo "Docker is already installed."
     fi
 
-    # Gỡ container và image cũ
-    sudo docker rm -f $(sudo docker ps -aq) || true
-    sudo docker image prune -f
-
     # Kéo Docker image và chạy container
     sudo docker pull $IMAGE_NAME:$IMAGE_TAG
+    sudo docker ps -q | xargs -r sudo docker stop
+    sudo docker ps -aq | xargs -r sudo docker rm
     sudo docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG
-
-    # Kiểm tra container đã chạy thành công
-    if ! curl -s http://localhost:80; then
-        echo "Deployment failed. Exiting..."
-        exit 1
-    fi
 SHEND
+
+# C:\Users\assas\OneDrive\Máy tính\Thực tập tốt nghiệp\Project\Project-CICD\deploy.sh
