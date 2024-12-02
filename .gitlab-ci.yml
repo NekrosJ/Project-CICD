@@ -3,8 +3,14 @@ variables:
   IMAGE_TAG: react-app-1.0
   AWS_REGION: "us-east-1"
   SSH_USER: "ec2-user"
-  EC2_PUBLIC_IP: "3.84.248.107"
+  EC2_PUBLIC_IP: "3.95.208.126"
   DOCKER_TLS_CERTDIR: "/certs"
+
+cache:
+  paths:
+    - node_modules/
+    - .npm/
+    - dist/
 
 stages:
   - install
@@ -15,12 +21,9 @@ stages:
 # Cài đặt dependencies
 install:
   stage: install
-  image: node:16
+  image: node:16-slim
   script:
     - npm install
-  artifacts:
-    paths:
-      - node_modules/
 
 # Build Docker image và push lên Docker Hub
 build:
@@ -37,7 +40,7 @@ build:
 # Chạy kiểm tra unit test
 test:
   stage: test
-  image: node:16
+  image: node:16-slim
   before_script:
     - apt-get update && apt-get install -y build-essential
   script:
@@ -45,17 +48,19 @@ test:
     - npm run test
   dependencies:
     - install
+  needs:
+    - install
 
 # Deploy ứng dụng lên AWS EC2
 deploy:
   stage: deploy
-  image: alpine:latest
+  image: alpine:3.16
   before_script:
     # Cài đặt SSH client
     - apk add --no-cache openssh-client bash
     # Tạo thư mục .ssh và thiết lập khóa riêng
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     # Thêm EC2 IP vào danh sách known_hosts
     - ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
