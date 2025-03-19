@@ -27,5 +27,3 @@ ssh -i ~/.ssh/id_rsa ec2-user@$EC2_PUBLIC_IP <<SHEND
     sudo docker ps -aq | xargs -r sudo docker rm
     sudo docker run -d -p 80:80 $IMAGE_NAME:$IMAGE_TAG
 SHEND
-
-# C:\Users\assas\OneDrive\Máy tính\Thực tập tốt nghiệp\Project\Project-CICD\deploy.sh
