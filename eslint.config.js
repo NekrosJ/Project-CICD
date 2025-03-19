@@ -2,19 +2,18 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
 
-/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest, // Nếu bạn sử dụng Jest
+        ...globals.jest,
       },
     },
     settings: {
       react: {
-        version: "detect", // Tự động phát hiện phiên bản React
+        version: "detect",
       },
     },
   },
