@@ -75,5 +75,3 @@ deploy:
     - master
   dependencies:
     - build
-
-# C:\Users\assas\OneDrive\Máy tính\Thực tập tốt nghiệp\Project\Project-CICD\.gitlab-ci.yml
