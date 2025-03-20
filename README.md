@@ -27,8 +27,3 @@ This project demonstrates a **CI/CD pipeline** for deploying a React application
 
 ### 🔹 CI/CD Automation  
 CI/CD pipelines are defined in `.gitlab-ci.yml` (GitLab) and `.github/workflows/deploy.yml` (GitHub Actions).  
-
-### 🔹 Manual Deployment  
-```bash
-docker build -t your-image-name .
-docker run -d -p 80:80 your-image-name
